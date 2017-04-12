@@ -1,0 +1,13 @@
+{
+    "name": "davidwnek/survey_monkey_api_php_client",
+    "description": "A PHP Client library for accessing Survey Monkey API's https://developer.surveymonkey.com/api/v3/",
+    "type": "library",
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "David Wnek",
+            "email": "davidwnek@gmail.com"
+        }
+    ],
+    "require": {}
+}
