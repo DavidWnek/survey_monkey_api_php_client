@@ -1,6 +1,6 @@
 <?php
 
-namespace Caxy\SurveyMonkey;
+namespace davidwnek\SurveyMonkey;
 
 
 class SurveyMonkeyException extends \Exception

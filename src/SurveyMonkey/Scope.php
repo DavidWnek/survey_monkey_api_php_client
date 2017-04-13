@@ -1,6 +1,6 @@
 <?php
 
-namespace Caxy\SurveyMonkey;
+namespace davidwnek\SurveyMonkey;
 
 
 class Scope
@@ -19,4 +19,27 @@ class Scope
     const READ_USERS = 'users_read';
     const READ_GROUPS = 'groups_read';
     const READ_LIBRARY = 'library_read';
+
+    /**
+     * @return array
+     */
+    public static function getAllScopes()
+    {
+        return array(
+            self::READ_SURVEYS,
+            self::WRITE_SURVEYS,
+            self::READ_COLLECTORS,
+            self::WRITE_COLLECTORS,
+            self::READ_CONTACTS,
+            self::WRITE_CONTACTS,
+            self::READ_RESPONSES,
+            self::READ_DETAIL_RESPONSES,
+            self::WRITE_RESPONSES,
+            self::READ_WEBHOOKS,
+            self::WRITE_WEBHOOKS,
+            self::READ_USERS,
+            self::READ_GROUPS,
+            self::READ_LIBRARY,
+        );
+    }
 }
