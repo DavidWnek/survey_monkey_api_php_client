@@ -155,6 +155,7 @@ class Client
 
         $client = $this->getGuzzleClient();
 
+
         try {
             $res = $client->request($method, sprintf('/%s%s', self::API_VERSION, $uri), array(
                 'headers' => array(
@@ -163,9 +164,12 @@ class Client
                 )
             ));
 
-            return $res;
         } catch (RequestException $exception) {
+            $res = $exception->getResponse();
             print_r($exception->getResponse()->getBody()->__toString());
+        }
+        finally {
+            return $res;
         }
     }
 

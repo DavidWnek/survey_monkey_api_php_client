@@ -4,6 +4,7 @@ namespace davidwnek\SurveyMonkey\Service;
 
 
 use davidwnek\SurveyMonkey\HTTPMethod;
+use davidwnek\SurveyMonkey\Response\ListResponse;
 
 class SurveyService extends ClientService
 {
@@ -18,7 +19,7 @@ class SurveyService extends ClientService
      * @param \DateTime|null $startModifiedAt
      * @param \DateTime|null $endModifiedAt
      *
-     * @return array
+     * @return ListResponse
      */
     public function getSurveys($page = 1, $resultsPerPage = self::RESULTS_PER_PAGE, $sortBy = 'title', $sortOrder = 'DESC',
                                $title = null, \DateTime $startModifiedAt = null, \DateTime $endModifiedAt = null)
@@ -35,9 +36,11 @@ class SurveyService extends ClientService
         $this->appendQueryParameter($params, 'start_modified_at', $startModifiedAt, 'format', 'YYYY-MM-DDTHH:SS');
         $this->appendQueryParameter($params, 'end_modified_at', $endModifiedAt, 'format', 'YYYY-MM-DDTHH:SS');
 
-        $response = $this->client->run('/surveys', HTTPMethod::GET, $params);
+        $response = $this->client->run('/survey', HTTPMethod::GET, $params);
 
-        print_r($response->getBody()->__toString());
+        print_r($response);
+
+        return new ListResponse($response);
     }
 
     /**
