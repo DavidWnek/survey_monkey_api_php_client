@@ -1,3 +1,5 @@
-$ composer install
-//To regenerate the autoload when new classes are added.
-$ composer dump-autoload
+# ${1:Project Name}
+## Installation
+```composer install```
+## Usage - Regenerate Autoload class
+```composer dump-autoload```
