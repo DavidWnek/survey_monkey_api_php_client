@@ -2,7 +2,6 @@
 
 namespace davidwnek\SurveyMonkey\Service;
 
-
 use davidwnek\SurveyMonkey\HTTPMethod;
 use davidwnek\SurveyMonkey\Response\ListResponse;
 
@@ -38,9 +37,11 @@ class SurveyService extends ClientService
 
         $response = $this->client->run('/surveys', HTTPMethod::GET, $params);
 
-        print_r($response);
+        if($response->isError()) {
+            return $response;
+        }
 
-        return new ListResponse($response);
+        return new ListResponse($response->getResponse());
     }
 
     /**
