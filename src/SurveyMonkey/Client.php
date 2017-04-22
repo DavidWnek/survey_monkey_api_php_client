@@ -3,6 +3,7 @@
 namespace davidwnek\SurveyMonkey;
 
 
+use davidwnek\SurveyMonkey\Response\ErrorResponse;
 use davidwnek\SurveyMonkey\TokenStorage\SessionTokenStorage;
 use davidwnek\SurveyMonkey\TokenStorage\TokenStorageFactory;
 use GuzzleHttp\Exception\RequestException;
@@ -142,7 +143,7 @@ class Client
      * @param string $method
      * @param array $queryParams
      * @param array $body
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @return \davidwnek\SurveyMonkey\Response\Response|ErrorResponse
      * @throws SurveyMonkeyException
      *
      * @return Response
@@ -154,22 +155,22 @@ class Client
         }
 
         $client = $this->getGuzzleClient();
-
+        $url = sprintf('/%s%s', self::API_VERSION, $uri);
 
         try {
-            $res = $client->request($method, sprintf('/%s%s', self::API_VERSION, $uri), array(
+            $res = $client->request($method, $url, array(
                 'headers' => array(
                     'Authorization' => sprintf('BEARER %s', $this->getTokenStorage()->getToken()->getAccessToken()),
                     'Content-Type' => 'application/json'
                 )
             ));
-
+            $responseType = \davidwnek\SurveyMonkey\Response\Response::class;
         } catch (RequestException $exception) {
             $res = $exception->getResponse();
-            print_r($exception->getResponse()->getBody()->__toString());
+            $responseType = ErrorResponse::class;
         }
         finally {
-            return $res;
+            return new $responseType($res);
         }
     }
 
