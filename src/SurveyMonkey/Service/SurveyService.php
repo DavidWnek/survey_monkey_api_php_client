@@ -36,7 +36,7 @@ class SurveyService extends ClientService
         $this->appendQueryParameter($params, 'start_modified_at', $startModifiedAt, 'format', 'YYYY-MM-DDTHH:SS');
         $this->appendQueryParameter($params, 'end_modified_at', $endModifiedAt, 'format', 'YYYY-MM-DDTHH:SS');
 
-        $response = $this->client->run('/survey', HTTPMethod::GET, $params);
+        $response = $this->client->run('/surveys', HTTPMethod::GET, $params);
 
         print_r($response);
 
