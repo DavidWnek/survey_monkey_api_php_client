@@ -2,6 +2,11 @@
 
 namespace davidwnek\SurveyMonkey\Response;
 
+use davidwnek\SurveyMonkey\Client;
+use davidwnek\SurveyMonkey\HTTPMethod;
+use davidwnek\SurveyMonkey\Model\Model;
+use davidwnek\SurveyMonkey\SurveyMonkeyException;
+
 class ListResponse extends Response
 {
     /**
@@ -49,21 +54,44 @@ class ListResponse extends Response
      */
     private $firstLink;
 
-    public function __construct(\GuzzleHttp\Psr7\Response $response)
+    /**
+     * @var Client
+     */
+    private $client;
+
+    private $class;
+
+    /**
+     * ListResponse constructor.
+     * @param \GuzzleHttp\Psr7\Response $response
+     * @param Client $client
+     * @param string|null $class
+     */
+    public function __construct(\GuzzleHttp\Psr7\Response $response, Client $client, $class = null)
     {
         parent::__construct($response);
 
-        $json = json_decode($this->getBody()->__toString());
+        $json = json_decode($this->getBodyText());
 
+        $this->class = $class;
+        $this->client = $client;
+        $this->data = array();
         $this->resultsPerPage = $json->per_page;
         $this->totalResults = $json->total;
-        $this->data = $json->data;
         $this->page = $json->page;
         $this->selfLink = $this->getLink($json, 'self');
         $this->nextLink = $this->getLink($json, 'next');
         $this->previousLink = $this->getLink($json, 'previous');
         $this->firstLink = $this->getLink($json, 'first');
         $this->lastLink = $this->getLink($json, 'last');
+
+        if($class !== null && get_parent_class($class) === Model::class) {
+            foreach($json->data as $data) {
+                $this->data[] = new $class($client, $data);
+            }
+        } else {
+            $this->data = $json->data;
+        }
     }
 
     private function getLink($json, $property)
@@ -73,6 +101,18 @@ class ListResponse extends Response
         }
 
         return null;
+    }
+
+    public function getNext()
+    {
+        /** @var Response $response */
+        $response = $this->client->runUrl($this->nextLink, HTTPMethod::GET);
+
+        if($response->isError()) {
+            return new ErrorResponse($response->getResponse());
+        }
+
+        return new ListResponse($response->getResponse(), $this->client, $this->class);
     }
 
     /**

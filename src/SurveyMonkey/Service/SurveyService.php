@@ -3,6 +3,7 @@
 namespace davidwnek\SurveyMonkey\Service;
 
 use davidwnek\SurveyMonkey\HTTPMethod;
+use davidwnek\SurveyMonkey\Model\Survey;
 use davidwnek\SurveyMonkey\Response\ListResponse;
 
 class SurveyService extends ClientService
@@ -28,7 +29,6 @@ class SurveyService extends ClientService
             'per_page' => $resultsPerPage,
             'sort_by' => $sortBy,
             'sort_order' => $sortOrder,
-
         );
 
         $this->appendQueryParameter($params, 'title', $title);
@@ -41,7 +41,7 @@ class SurveyService extends ClientService
             return $response;
         }
 
-        return new ListResponse($response->getResponse());
+        return new ListResponse($response->getResponse(), $this->getClient(), Survey::class);
     }
 
     /**

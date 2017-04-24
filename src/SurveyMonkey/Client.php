@@ -2,11 +2,12 @@
 
 namespace davidwnek\SurveyMonkey;
 
-
 use davidwnek\SurveyMonkey\Response\ErrorResponse;
 use davidwnek\SurveyMonkey\TokenStorage\SessionTokenStorage;
 use davidwnek\SurveyMonkey\TokenStorage\TokenStorageFactory;
+use davidwnek\SurveyMonkey\TokenStorage\TokenStorageInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
 class Client
@@ -67,7 +68,7 @@ class Client
      *
      * @throws SurveyMonkeyException
      */
-    public function __construct($clientId, $secret, array $scopes, $redirectUri, $tokenStorageInterface = null)
+    public function __construct($clientId, $secret, array $scopes, $redirectUri, TokenStorageInterface $tokenStorageInterface = null)
     {
         if(empty($clientId)) {
             throw new SurveyMonkeyException('Missing Client ID');
@@ -94,7 +95,7 @@ class Client
         $this->redirectUri = $redirectUri;
         $this->scopes = $scopes;
 
-        $this->tokenStorage = TokenStorageFactory::createTokenStorage($tokenStorageInterface === null ? SessionTokenStorage::class : $tokenStorageInterface);
+        $this->tokenStorage =  $tokenStorageInterface;
 
     }
 
@@ -150,20 +151,33 @@ class Client
      */
     public function run($uri, $method, array $queryParams = array(), array $body = array())
     {
+        $url = sprintf('/%s%s', self::API_VERSION, $uri);
+
+        return $this->runUrl($url, $method, $queryParams, $body);
+    }
+
+    public function runUrl($url, $method, array $queryParams = array(), array $body = array())
+    {
         if(!in_array($method, HTTPMethod::getAllMethods())) {
             throw new SurveyMonkeyException('Invalid Method');
         }
 
+        if(count($queryParams) > 0) {
+            $url .= sprintf('?%s', http_build_query($queryParams));
+        }
+
         $client = $this->getGuzzleClient();
-        $url = sprintf('/%s%s', self::API_VERSION, $uri);
+
+        $body = $method === HTTPMethod::POST ? json_encode($body) : null;
 
         try {
-            $res = $client->request($method, $url, array(
-                'headers' => array(
-                    'Authorization' => sprintf('BEARER %s', $this->getTokenStorage()->getToken()->getAccessToken()),
-                    'Content-Type' => 'application/json'
-                )
-            ));
+            $request = new Request(strtoupper($method), $url, array(
+                'Authorization' => sprintf('BEARER %s', $this->getTokenStorage()->getToken()->getAccessToken()),
+                'Content-Type' => 'application/json'
+            ), $body);
+
+            $res = $client->send($request);
+
             $responseType = \davidwnek\SurveyMonkey\Response\Response::class;
         } catch (RequestException $exception) {
             $res = $exception->getResponse();

@@ -43,6 +43,14 @@ class Response
     /**
      * @return string
      */
+    public function getBodyText()
+    {
+        return $this->getBody()->__toString();
+    }
+
+    /**
+     * @return string
+     */
     public function getReasonPhrase()
     {
         return  $this->response->getReasonPhrase();
