@@ -15,6 +15,6 @@ class SurveyResponseService extends ClientService
             return $response;
         }
 
-        return new SurveyResponse($this->getClient(), $response->getResponse()->getBody()->__toString());
+        return SurveyResponse::createFromString($this->getClient(), $response->getResponse()->getBody()->__toString());
     }
 }

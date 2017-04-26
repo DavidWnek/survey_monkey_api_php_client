@@ -4,6 +4,7 @@ namespace davidwnek\SurveyMonkey\Model;
 
 use davidwnek\SurveyMonkey\Client;
 use davidwnek\SurveyMonkey\HTTPMethod;
+use davidwnek\SurveyMonkey\Service\ClientService;
 use davidwnek\SurveyMonkey\SurveyMonkeyException;
 
 abstract class Model
@@ -29,12 +30,50 @@ abstract class Model
     private $client;
 
     /**
+     * @param Client $client
+     * @param string$data
+     * @param bool $autoLoad
+     * @return Model
+     * @throws SurveyMonkeyException
+     */
+    static public function createFromString(Client $client, $data, $autoLoad = false)
+    {
+        if(!is_string($data)) {
+            throw new SurveyMonkeyException('Model Data is not of type: String');
+        }
+
+        $json = json_decode($data);
+
+        if($json === null) {
+            throw new SurveyMonkeyException('Invalid JSON');
+        }
+
+        return new static($client, $json, $autoLoad);
+    }
+
+    /**
+     * @param Client $client
+     * @param array|object $json
+     * @param bool $autoLoad
+     * @return Model
+     * @throws SurveyMonkeyException
+     */
+    static public function createFromJson(Client $client, $json, $autoLoad = false)
+    {
+        if($json === null) {
+            throw new SurveyMonkeyException('Invalid JSON');
+        }
+
+        return new static($client, $json, $autoLoad);
+    }
+
+    /**
      * Model constructor.
      * @param Client $client
-     * @param string $data
+     * @param array|object $data
      * @param bool $autoLoad
      */
-    public function __construct(Client $client, $data, $autoLoad = false)
+    protected function __construct(Client $client, $data, $autoLoad)
     {
         $this->client = $client;
         $this->onLoad($data);
@@ -137,7 +176,7 @@ abstract class Model
     }
 
     /**
-     * @param string $data
+     * @param array|object $data
      */
     protected function onLoad($data)
     {

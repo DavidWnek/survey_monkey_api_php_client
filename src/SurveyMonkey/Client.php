@@ -60,6 +60,16 @@ class Client
     private $tokenStorage;
 
     /**
+     * @var int
+     */
+    private $rateLimit = 0;
+
+    /**
+     * @var int
+     */
+    private $rateRemaining = 0;
+
+    /**
      * Client constructor.
      * @param string $clientId
      * @param string $secret
@@ -96,7 +106,6 @@ class Client
         $this->scopes = $scopes;
 
         $this->tokenStorage =  $tokenStorageInterface;
-
     }
 
     /**
@@ -140,6 +149,22 @@ class Client
     }
 
     /**
+     * @return int
+     */
+    public function getRateLimit()
+    {
+        return $this->rateLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRateRemaining()
+    {
+        return $this->rateRemaining;
+    }
+
+    /**
      * @param string $uri
      * @param string $method
      * @param array $queryParams
@@ -156,6 +181,16 @@ class Client
         return $this->runUrl($url, $method, $queryParams, $body);
     }
 
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array $queryParams
+     * @param array $body
+     * @return \davidwnek\SurveyMonkey\Response\Response|ErrorResponse
+     * @throws SurveyMonkeyException
+     *
+     * @return Response
+     */
     public function runUrl($url, $method, array $queryParams = array(), array $body = array())
     {
         if(!in_array($method, HTTPMethod::getAllMethods())) {
@@ -184,6 +219,13 @@ class Client
             $responseType = ErrorResponse::class;
         }
         finally {
+            if($res->hasHeader('X-Ratelimit-App-Global-Day-Limit')) {
+                $this->rateLimit = $res->getHeader('X-Ratelimit-App-Global-Day-Limit');
+            }
+
+            if($res->hasHeader('X-Ratelimit-App-Global-Day-Remaining')) {
+                $this->rateRemaining = $res->getHeader('X-Ratelimit-App-Global-Day-Remaining');
+            }
             return new $responseType($res);
         }
     }

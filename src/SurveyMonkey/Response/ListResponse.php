@@ -59,21 +59,21 @@ class ListResponse extends Response
      */
     private $client;
 
-    private $class;
+    private $modelClass;
 
     /**
      * ListResponse constructor.
      * @param \GuzzleHttp\Psr7\Response $response
      * @param Client $client
-     * @param string|null $class
+     * @param string|null $modelClass
      */
-    public function __construct(\GuzzleHttp\Psr7\Response $response, Client $client, $class = null)
+    public function __construct(\GuzzleHttp\Psr7\Response $response, Client $client, $modelClass = null)
     {
         parent::__construct($response);
 
         $json = json_decode($this->getBodyText());
 
-        $this->class = $class;
+        $this->modelClass = $modelClass;
         $this->client = $client;
         $this->data = array();
         $this->resultsPerPage = $json->per_page;
@@ -85,9 +85,9 @@ class ListResponse extends Response
         $this->firstLink = $this->getLink($json, 'first');
         $this->lastLink = $this->getLink($json, 'last');
 
-        if($class !== null && get_parent_class($class) === Model::class) {
+        if($modelClass !== null && get_parent_class($modelClass) === Model::class) {
             foreach($json->data as $data) {
-                $this->data[] = new $class($client, $data);
+                $this->data[] = $modelClass::createFromJson($client, $data);
             }
         } else {
             $this->data = $json->data;
@@ -112,7 +112,7 @@ class ListResponse extends Response
             return new ErrorResponse($response->getResponse());
         }
 
-        return new ListResponse($response->getResponse(), $this->client, $this->class);
+        return new ListResponse($response->getResponse(), $this->client, $this->modelClass);
     }
 
     /**

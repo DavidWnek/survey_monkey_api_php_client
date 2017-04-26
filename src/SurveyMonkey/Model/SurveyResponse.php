@@ -5,26 +5,93 @@ namespace davidwnek\SurveyMonkey\Model;
 
 class SurveyResponse extends Model
 {
+    /**
+     * @var int
+     */
     protected $totalTime;
+
+    /**
+     * @var object
+     */
     protected $customVariables;
+
+    /**
+     * @var string
+     */
     protected $ipAddress;
+
+    /**
+     * @var object
+     */
     protected $logicPath;
+
+    /**
+     * @var string
+     */
     protected $dateModified;
+
+    /**
+     * @var string
+     */
     protected $responseStatus;
+
+    /**
+     * @var string
+     */
     protected $customValue;
+
+    /**
+     * @var string
+     */
     protected $analyzeUrl;
+
+    /**
+     * @var array
+     */
     protected $pages;
+
+    /**
+     * @var array
+     */
     protected $pagePath;
+
+    /**
+     * @var string
+     */
     protected $recipientId;
+
+    /**
+     * @var string
+     */
     protected $collectorId;
+
+    /**
+     * @var string
+     */
     protected $dateCreated;
+
+    /**
+     * @var string
+     */
     protected $surveyId;
+
+    /**
+     * @var string
+     */
     protected $collectionMode;
+
+    /**
+     * @var string
+     */
     protected $editUrl;
+
+    /**
+     * @var object
+     */
     protected $metaData;
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getTotalTime()
     {
@@ -32,7 +99,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return object
      */
     public function getCustomVariables()
     {
@@ -40,7 +107,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getIpAddress()
     {
@@ -48,7 +115,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return object
      */
     public function getLogicPath()
     {
@@ -56,7 +123,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDateModified()
     {
@@ -64,7 +131,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getResponseStatus()
     {
@@ -72,7 +139,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCustomValue()
     {
@@ -80,7 +147,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAnalyzeUrl()
     {
@@ -88,7 +155,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getPages()
     {
@@ -96,7 +163,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getPagePath()
     {
@@ -104,7 +171,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getRecipientId()
     {
@@ -112,7 +179,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCollectorId()
     {
@@ -120,7 +187,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDateCreated()
     {
@@ -128,7 +195,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSurveyId()
     {
@@ -136,7 +203,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCollectionMode()
     {
@@ -144,7 +211,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEditUrl()
     {
@@ -152,7 +219,7 @@ class SurveyResponse extends Model
     }
 
     /**
-     * @return mixed
+     * @return object
      */
     public function getMetaData()
     {
