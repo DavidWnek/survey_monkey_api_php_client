@@ -3,6 +3,7 @@
 namespace davidwnek\SurveyMonkey\Service;
 
 use davidwnek\SurveyMonkey\HTTPMethod;
+use davidwnek\SurveyMonkey\Model\Page;
 use davidwnek\SurveyMonkey\Model\Survey;
 use davidwnek\SurveyMonkey\Response\ListResponse;
 
@@ -29,26 +30,6 @@ class PagesService extends ClientService
             return $response;
         }
 
-        return new ListResponse($response->getResponse(), $this->getClient(), Survey::class);
-    }
-
-    /**
-     * @param array $params
-     * @param string $name
-     * @param mixed $value
-     * @param null $function
-     * @param null $parameter
-     */
-    private function appendQueryParameter(&$params, $name, $value, $function = null, $parameter = null)
-    {
-        if(empty($value)) {
-            return;
-        }
-
-        if($function !== null) {
-            $params[$name] = $value->$function($parameter);
-            return;
-        }
-        $params[$name] = $value;
+        return new ListResponse($response->getResponse(), $this->getClient(), Page::class);
     }
 }
