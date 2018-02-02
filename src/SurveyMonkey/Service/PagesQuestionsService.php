@@ -15,17 +15,13 @@ class PagesQuestionsService extends ClientService
      * @param int $question
      * @param int $page
      * @param int $resultsPerPage
-     * @param string $sortBy
-     * @param string $sortOrder
      * @return ListResponse
      */
-    public function getSurveyPagesQuestions($survey, $question, $page = 1, $resultsPerPage = self::RESULTS_PER_PAGE, $sortBy = 'title', $sortOrder = 'DESC')
+    public function getSurveyPagesQuestions($survey, $question, $page = 1, $resultsPerPage = self::RESULTS_PER_PAGE)
     {
         $params = array(
             'page' => $page,
             'per_page' => $resultsPerPage,
-            'sort_by' => $sortBy,
-            'sort_order' => $sortOrder,
         );
 
         $response = $this->client->run(sprintf('/surveys/%s/pages/%s/questions', $survey, $question), HTTPMethod::GET, $params);
