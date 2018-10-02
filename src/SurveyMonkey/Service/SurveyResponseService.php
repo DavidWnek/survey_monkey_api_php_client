@@ -4,6 +4,7 @@ namespace davidwnek\SurveyMonkey\Service;
 
 use davidwnek\SurveyMonkey\HTTPMethod;
 use davidwnek\SurveyMonkey\Model\SurveyResponse;
+use davidwnek\SurveyMonkey\Response\ListResponse;
 
 class SurveyResponseService extends ClientService
 {
@@ -15,7 +16,7 @@ class SurveyResponseService extends ClientService
             return $response;
         }
 
-        return SurveyResponse::createFromString($this->getClient(), $response->getResponse()->getBody()->__toString());
+        return new ListResponse($response->getResponse(), $this->getClient(), SurveyResponse::class);
     }
 
     public function getResponse($survey, $response)
