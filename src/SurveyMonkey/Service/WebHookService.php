@@ -10,8 +10,6 @@ use davidwnek\SurveyMonkey\SurveyMonkeyException;
 
 class WebHookService extends ClientService
 {
-    const RESULTS_PER_PAGE = 25;
-
     const EVENT_RESPONSE_COMPLETED = 'response_completed';
     const EVENT_RESPONSE_DISQUALIFIED = 'response_disqualified';
     const EVENT_RESPONSE_UPDATED = 'response_updated';

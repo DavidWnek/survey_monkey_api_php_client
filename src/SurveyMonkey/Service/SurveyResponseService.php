@@ -8,9 +8,14 @@ use davidwnek\SurveyMonkey\Response\ListResponse;
 
 class SurveyResponseService extends ClientService
 {
-    public function getResponses($survey)
+    public function getResponses($survey, $page = 1, $resultsPerPage = self::RESULTS_PER_PAGE)
     {
-        $response = $this->client->run(sprintf('/surveys/%s/responses', $survey), HTTPMethod::GET);
+        $params = array(
+            'page' => $page,
+            'per_page' => $resultsPerPage,
+        );
+
+        $response = $this->client->run(sprintf('/surveys/%s/responses', $survey), HTTPMethod::GET, $params);
 
         if($response->isError()) {
             return $response;

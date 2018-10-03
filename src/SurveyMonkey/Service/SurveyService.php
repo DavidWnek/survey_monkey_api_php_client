@@ -8,8 +8,6 @@ use davidwnek\SurveyMonkey\Response\ListResponse;
 
 class SurveyService extends ClientService
 {
-    const RESULTS_PER_PAGE = 25;
-
     /**
      * @param int $page
      * @param int $resultsPerPage

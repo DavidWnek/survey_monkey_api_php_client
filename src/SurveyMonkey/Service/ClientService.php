@@ -6,6 +6,8 @@ use davidwnek\SurveyMonkey\Client;
 
 class ClientService
 {
+    const RESULTS_PER_PAGE = 25;
+
     /**
      * @var Client
      */
